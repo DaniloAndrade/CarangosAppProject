@@ -19,11 +19,9 @@ import br.com.caelum.fj59.carangos.webservice.WebClient;
 public class BuscaMaisPublicacoesTask extends AsyncTask<Pagina, Void, List<Publicacao>> {
 
     private Exception erro;
-    //private MainActivity activity;
     private BuscaMaisPublicacoesDelegate delegate;
 
     public BuscaMaisPublicacoesTask(BuscaMaisPublicacoesDelegate delegate) {
-       // this.activity = activity;
         this.delegate = delegate;
         this.delegate.getCarangosApplication().registra(this);
     }
@@ -31,13 +29,9 @@ public class BuscaMaisPublicacoesTask extends AsyncTask<Pagina, Void, List<Publi
     @Override
     protected List<Publicacao> doInBackground(Pagina... paginas) {
         try {
-            Thread.sleep(1000);
             Pagina paginaParaBuscar = paginas.length > 1? paginas[0] : new Pagina();
-
             String jsonDeResposta = new WebClient("post/list?" + paginaParaBuscar).get();
-
             List<Publicacao> publicacoesRecebidas = new PublicacaoConverter().converte(jsonDeResposta);
-
             return publicacoesRecebidas;
         } catch (Exception e) {
             this.erro = e;
@@ -47,19 +41,11 @@ public class BuscaMaisPublicacoesTask extends AsyncTask<Pagina, Void, List<Publi
 
     @Override
     protected void onPostExecute(List<Publicacao> retorno) {
-//        MyLog.i("RETORNO OBTIDO!" + retorno);
-//
-//        if (retorno!=null) {
-//            this.activity.atualizaListaCom(retorno);
-//        } else {
-//            Toast.makeText(this.activity, "Erro na busca dos dados", Toast.LENGTH_SHORT).show();
-//        }
         if(retorno != null){
             delegate.lidaComRetorno(retorno);
         }else {
             delegate.lidaComErro(erro);
         }
-
         delegate.getCarangosApplication().desregistra(this);
     }
 }

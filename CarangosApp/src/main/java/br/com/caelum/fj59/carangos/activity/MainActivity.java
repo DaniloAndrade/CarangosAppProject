@@ -1,10 +1,13 @@
 package br.com.caelum.fj59.carangos.activity;
 
+import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.v7.app.ActionBarActivity;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,41 +15,53 @@ import br.com.caelum.fj59.carangos.R;
 import br.com.caelum.fj59.carangos.adapter.PublicacaoAdapter;
 import br.com.caelum.fj59.carangos.application.CarangosApplication;
 import br.com.caelum.fj59.carangos.delegate.BuscaMaisPublicacoesDelegate;
+import br.com.caelum.fj59.carangos.fragments.ListaDePublicacoesFragment;
+import br.com.caelum.fj59.carangos.fragments.ProgressFragment;
+import br.com.caelum.fj59.carangos.infra.MyLog;
 import br.com.caelum.fj59.carangos.modelo.Publicacao;
+import br.com.caelum.fj59.carangos.navegacao.EstadoMainActivity;
 import br.com.caelum.fj59.carangos.tasks.BuscaMaisPublicacoesTask;
 
 public class MainActivity extends ActionBarActivity implements BuscaMaisPublicacoesDelegate{
+    public static final String ESTADO = "estado";
     private ListView listView;
-    private List<Publicacao> publicacoes;
+    //private List<Publicacao> publicacoes;
     private PublicacaoAdapter adapter;
+    private EstadoMainActivity estado;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.publicacoes_list);
+        setContentView(R.layout.main);
+        //this.publicacoes = new ArrayList<Publicacao>();
+        this.estado = EstadoMainActivity.INICIO;
+        //this.estado.executa(this);
+    }
 
-        this.listView = (ListView) findViewById(R.id.publicacoes_list);
-        this.publicacoes = new ArrayList<Publicacao>();
-        this.adapter = new PublicacaoAdapter(this, this.publicacoes);
 
-        this.listView.setAdapter(adapter);
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        MyLog.i("Salvando Estado!");
+        outState.putSerializable(ESTADO,estado);
+    }
 
+    public void buscaPublicacoes() {
         new BuscaMaisPublicacoesTask(this).execute();
     }
 
-    private void atualizaListaCom(List<Publicacao> publicacoes) {
-        this.publicacoes.clear();
-        this.publicacoes.addAll(publicacoes);
-        this.adapter.notifyDataSetChanged();
-    }
-
-    public List<Publicacao> getPublicacoes() {
-        return this.publicacoes;
-    }
+    //public List<Publicacao> getPublicacoes() {
+    //    return this.publicacoes;
+    //}
 
     @Override
     public void lidaComRetorno(List<Publicacao> publicacaos) {
-        atualizaListaCom(publicacaos);
+        CarangosApplication carangosApplication = getCarangosApplication();
+        List<Publicacao> publicacoes = carangosApplication.getPublicacoes();
+        publicacoes.clear();
+        publicacoes.addAll(publicacaos);
+        this.estado = EstadoMainActivity.PRIMEIRAS_PUBLICACOES_RECEBIDAS;
+        this.estado.executa(this);
     }
 
     @Override
@@ -59,4 +74,28 @@ public class MainActivity extends ActionBarActivity implements BuscaMaisPublicac
     public CarangosApplication getCarangosApplication() {
         return (CarangosApplication) getApplication();
     }
+
+    public void alteraEstadoEExecuta(EstadoMainActivity estadoMainActivity) {
+        this.estado = estadoMainActivity;
+        this.estado.executa(this);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+
+        MyLog.i("RESTAURANDO ESTADO!" );
+        estado = (EstadoMainActivity) savedInstanceState.getSerializable(ESTADO);
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+         MyLog.i("EXECUTANDO ESTADO: " + estado);
+        estado.executa(this);
+    }
 }
+
