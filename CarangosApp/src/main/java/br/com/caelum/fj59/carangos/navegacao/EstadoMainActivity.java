@@ -23,15 +23,22 @@ public enum EstadoMainActivity {
         @Override
         public void executa(MainActivity activity) {
             ProgressFragment progressFragment = ProgressFragment.comMensagem(R.string.carregando);
-            this.colocaFragmentNaTela(activity,progressFragment);
+            this.colocaFragmentNaTela(activity, progressFragment);
         }
     }, PRIMEIRAS_PUBLICACOES_RECEBIDAS {
         @Override
         public void executa(MainActivity activity) {
             ListaDePublicacoesFragment listaDePublicacoesFragment = new ListaDePublicacoesFragment();
-            colocaFragmentNaTela(activity,listaDePublicacoesFragment);
+            colocaFragmentNaTela(activity, listaDePublicacoesFragment);
         }
-    };
+    }, PULL_TO_REFRESH_REQUISITADO {
+        @Override
+        public void executa(MainActivity activity) {
+            activity.buscaPublicacoes();
+        }
+    }
+
+    ;
 
 
     public abstract void executa(MainActivity activity);

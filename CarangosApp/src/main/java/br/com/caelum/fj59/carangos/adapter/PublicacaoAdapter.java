@@ -10,9 +10,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 import br.com.caelum.fj59.carangos.R;
+import br.com.caelum.fj59.carangos.infra.MyLog;
 import br.com.caelum.fj59.carangos.modelo.Publicacao;
 
 /**
@@ -44,32 +48,26 @@ public class PublicacaoAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup viewGroup) {
-        Publicacao publicacao = (Publicacao) getItem(position);
 
-        View linha = LayoutInflater.from(context).inflate(R.layout.
-                publicacao_linha_par, viewGroup, false);
+        int layout = position % 2 == 0 ? R.layout.publicacao_linha_par :  R.layout.publicacao_linha_impar;
 
-        ImageView foto = (ImageView) linha.findViewById(R.id.foto);
-        TextView mensagem = (TextView) linha.findViewById(R.id.mensagem);
-        TextView nomeAutor = (TextView) linha.findViewById(R.id.nome_autor);
-        ImageView emoticon = (ImageView) linha.findViewById(R.id.emoticon);
-        ProgressBar progress = (ProgressBar) linha.findViewById(R.id.progress);
+        ViewHolder holder;
 
-        mensagem.setText(publicacao.getMensagem());
-        nomeAutor.setText(publicacao.getAutor().getNome());
+        if(convertView == null){
+            convertView = LayoutInflater.from(context).inflate(layout, viewGroup, false);
+            holder = new ViewHolder(convertView);
+            convertView.setTag(holder);
+            MyLog.i("Criou uma nova linha");
 
-        foto.setImageDrawable(this.context.getResources().getDrawable(R.drawable.ic_car));
 
-        int idImagem = 0;
-        switch (publicacao.getEstadoDeHumor()) {
-            case ANIMADO: idImagem = R.drawable.ic_muito_feliz; break;
-            case INDIFERENTE: idImagem = R.drawable.ic_feliz; break;
-            case TRISTE: idImagem = R.drawable.ic_indiferente; break;
+        }else {
+            holder = (ViewHolder) convertView.getTag();
+            MyLog.i("Aproveitou a linha");
         }
 
-        emoticon.setImageDrawable(this.context.getResources().getDrawable(idImagem));
-
-        return linha;
+        Publicacao publicacao = (Publicacao) getItem(position);
+        holder.preencher(context,publicacao);
+        return convertView;
     }
 
     @Override
@@ -95,6 +93,47 @@ public class PublicacaoAdapter extends BaseAdapter {
             this.mensagem = (TextView) view.findViewById(R.id.mensagem);
             this.nomeAutor = (TextView) view.findViewById(R.id.nome_autor);
             this.progress = (ProgressBar) view.findViewById(R.id.progress);
+        }
+
+        public void preencher(Context context, Publicacao publicacao) {
+            mensagem.setText(publicacao.getMensagem());
+            nomeAutor.setText(publicacao.getAutor().getNome());
+
+            //foto.setImageDrawable(this.context.getResources().getDrawable(R.drawable.ic_car));
+            progress.setVisibility(View.VISIBLE);
+            Picasso.with(context)
+                    .load(publicacao.getFoto())
+                    .fit()
+                    .placeholder(context.getResources().getDrawable(R.drawable.ic_car))
+                    .into(foto,new VerificadorDeRetorno(progress));
+
+            int idImagem = 0;
+            switch (publicacao.getEstadoDeHumor()) {
+                case ANIMADO: idImagem = R.drawable.ic_muito_feliz; break;
+                case INDIFERENTE: idImagem = R.drawable.ic_feliz; break;
+                case TRISTE: idImagem = R.drawable.ic_indiferente; break;
+            }
+
+            emoticon.setImageDrawable(context.getResources().getDrawable(idImagem));
+        }
+    }
+
+    private class VerificadorDeRetorno implements Callback {
+        private ProgressBar progress;
+
+        public VerificadorDeRetorno(ProgressBar progressBar) {
+            this.progress = progressBar;
+        }
+
+
+        @Override
+        public void onSuccess() {
+           progress.setVisibility(View.GONE);
+        }
+
+        @Override
+        public void onError() {
+            progress.setVisibility(View.GONE);
         }
     }
 }
