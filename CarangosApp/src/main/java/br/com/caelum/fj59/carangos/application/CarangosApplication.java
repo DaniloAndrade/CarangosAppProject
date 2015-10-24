@@ -2,6 +2,7 @@ package br.com.caelum.fj59.carangos.application;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -20,6 +21,7 @@ public class CarangosApplication extends Application {
 
     public static final String REGISTRADO_NO_GCM = "registradoNoGcm";
     public static final String ID_DO_REGISTRO = "idDoRegistro";
+    private static Context aplication;
     private List<AsyncTask> tasks = new ArrayList<>();
     private List<Publicacao> publicacoes = new ArrayList<>();
     private SharedPreferences preferences;

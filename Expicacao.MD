@@ -19,3 +19,18 @@ android não consegue recontruir a fragment
 
 
 -- SharedPreferences - usado para armazenar informações em formato key/value para o app
+
+
+
+-- para testar o puch notifications
+http://carangos.herokuapp.com/device/pingaNiMim
+
+GCM -
+    Problemas
+     - Não garante entrega
+     - Nao garante ordem
+
+
+
+
+Dica:

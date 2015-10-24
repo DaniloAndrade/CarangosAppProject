@@ -15,6 +15,7 @@ import br.com.caelum.fj59.carangos.R;
 import br.com.caelum.fj59.carangos.adapter.PublicacaoAdapter;
 import br.com.caelum.fj59.carangos.application.CarangosApplication;
 import br.com.caelum.fj59.carangos.delegate.BuscaMaisPublicacoesDelegate;
+import br.com.caelum.fj59.carangos.evento.EventoAtualizarLista;
 import br.com.caelum.fj59.carangos.evento.EventoPublicacoesRecebidas;
 import br.com.caelum.fj59.carangos.fragments.ListaDePublicacoesFragment;
 import br.com.caelum.fj59.carangos.fragments.ProgressFragment;
@@ -30,6 +31,7 @@ public class MainActivity extends ActionBarActivity implements BuscaMaisPublicac
     private PublicacaoAdapter adapter;
     private EstadoMainActivity estado;
     private EventoPublicacoesRecebidas receiver;
+    private EventoAtualizarLista atualizarListaReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,7 @@ public class MainActivity extends ActionBarActivity implements BuscaMaisPublicac
         this.estado = EstadoMainActivity.INICIO;
         //this.estado.executa(this);
         receiver = EventoPublicacoesRecebidas.registraObservador(this);
+        //atualizarListaReceiver = EventoAtualizarLista.registraObservador(this); //TODO implementar atualização
     }
 
 

@@ -2,5 +2,6 @@
 
     <string name="app_name">Carangos</string>
     <string name="carregando">Carregando lista de publicações…</string>
+    <string name="leilao">Leilão</string>
 
 </resources>
