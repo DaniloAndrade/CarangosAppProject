@@ -1,5 +1,6 @@
 package br.com.caelum.fj59.carangos.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v7.app.ActionBarActivity;
@@ -38,7 +39,6 @@ public class LeilaoActivity extends ActionBarActivity {
         lancesList.setAdapter(adapter);
 
         CustomHandler handler = new CustomHandler(adapter,lancesAteMomento);
-
-        new BuscaLeilaoTask(handler,horarioUltimausca).executa();
+        new BuscaLeilaoTask(handler,horarioUltimausca,getApplication()).executa();
     }
 }

@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Carrangos HotRod</string>
+
+    <string name="server_uri">
+        http://carangostunning.herokuapp.com/%s
+    </string>
+
+    <string name="action_compra">br.com.caelum.fj59.carangos.compra.HotRod</string>
+    <string name="title_activity_hotrod_compras">Carros HotRod</string>
+</resources>

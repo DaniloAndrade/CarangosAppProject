@@ -3,5 +3,9 @@
     <string name="app_name">Carangos</string>
     <string name="carregando">Carregando lista de publicações…</string>
     <string name="leilao">Leilão</string>
+    <string name="server_uri">
+        http://carangos.herokuapp.com/%s
+    </string>
+    <string name="action_compra">DEFINA UMA ACTION</string>
 
 </resources>

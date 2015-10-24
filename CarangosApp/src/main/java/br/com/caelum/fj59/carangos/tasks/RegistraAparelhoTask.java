@@ -30,7 +30,7 @@ public class RegistraAparelhoTask extends AsyncTask<Void,Void,String> {
             MyLog.i("Aparelho registrado com ID: " + registrationId);
             String email = InformacoesDoUsuario.getEmail(application);
             String url = "device/register/"+email+"/"+registrationId;
-            WebClient client = new WebClient(url);
+            WebClient client = new WebClient(url, application);
             client.post();
         }catch (Exception e){
             MyLog.e("Problema no registro do aparelho no server!" + e.getMessage());

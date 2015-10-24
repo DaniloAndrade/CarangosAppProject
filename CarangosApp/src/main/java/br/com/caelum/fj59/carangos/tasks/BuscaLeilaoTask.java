@@ -1,8 +1,7 @@
 package br.com.caelum.fj59.carangos.tasks;
 
-import android.content.Context;
+import android.app.Application;
 import android.os.Message;
-import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -18,22 +17,23 @@ import br.com.caelum.fj59.carangos.webservice.WebClient;
 public class BuscaLeilaoTask extends TimerTask {
 
 
-    private Context context;
+    private Application application;
     private CustomHandler handler;
     private Calendar horarioUltimausca;
 
-    public BuscaLeilaoTask(CustomHandler handler, Calendar horarioUltimausca) {
+    public BuscaLeilaoTask(CustomHandler handler, Calendar horarioUltimausca, Application application) {
         this.handler = handler;
         this.horarioUltimausca = horarioUltimausca;
+        this.application = application;
     }
 
     @Override
     public void run() {
         MyLog.i("Efetuando nova busca!");
-       // Toast.makeText(context,"Efetuando nova busca!",Toast.LENGTH_LONG).show();
+       // Toast.makeText(application,"Efetuando nova busca!",Toast.LENGTH_LONG).show();
 
         WebClient client = new WebClient("leilao/leilaoid54635/"+new SimpleDateFormat("ddMMyyyyHHmmss")
-                .format(horarioUltimausca.getTime()));
+                .format(horarioUltimausca.getTime()), application);
 
         String json = client.get();
 

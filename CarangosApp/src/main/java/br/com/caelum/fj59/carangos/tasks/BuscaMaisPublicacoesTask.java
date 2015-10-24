@@ -1,17 +1,13 @@
 package br.com.caelum.fj59.carangos.tasks;
 
 import android.os.AsyncTask;
-import android.widget.Toast;
 
 import java.io.Serializable;
 import java.util.List;
 
-import br.com.caelum.fj59.carangos.activity.MainActivity;
 import br.com.caelum.fj59.carangos.application.CarangosApplication;
 import br.com.caelum.fj59.carangos.converter.PublicacaoConverter;
-import br.com.caelum.fj59.carangos.delegate.BuscaMaisPublicacoesDelegate;
 import br.com.caelum.fj59.carangos.evento.EventoPublicacoesRecebidas;
-import br.com.caelum.fj59.carangos.infra.MyLog;
 import br.com.caelum.fj59.carangos.modelo.Publicacao;
 import br.com.caelum.fj59.carangos.webservice.Pagina;
 import br.com.caelum.fj59.carangos.webservice.WebClient;
@@ -39,7 +35,7 @@ public class BuscaMaisPublicacoesTask extends AsyncTask<Pagina, Void, List<Publi
     protected List<Publicacao> doInBackground(Pagina... paginas) {
         try {
             Pagina paginaParaBuscar = paginas.length > 1? paginas[0] : new Pagina();
-            String jsonDeResposta = new WebClient("post/list?" + paginaParaBuscar).get();
+            String jsonDeResposta = new WebClient("post/list?" + paginaParaBuscar, application).get();
             List<Publicacao> publicacoesRecebidas = new PublicacaoConverter().converte(jsonDeResposta);
             return publicacoesRecebidas;
         } catch (Exception e) {
