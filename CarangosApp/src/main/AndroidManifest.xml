@@ -15,6 +15,14 @@
         android:icon="@drawable/ic_camaro"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+
+        <receiver android:name=".gcm.GCMBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+                <category android:name="br.com.caelum.fj59.carangos"/>
+            </intent-filter>
+        </receiver>
+
         <activity
             android:name="br.com.caelum.fj59.carangos.activity.MainActivity"
             android:label="@string/app_name" >

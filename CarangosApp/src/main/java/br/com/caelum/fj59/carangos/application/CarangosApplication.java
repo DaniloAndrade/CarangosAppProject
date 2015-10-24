@@ -74,6 +74,10 @@ public class CarangosApplication extends Application {
     public void lidaComRespostaDoRegistroNoServidor(String registro) {
         if (registro != null){
             //TODO implementar
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean(REGISTRADO_NO_GCM, true);
+            editor.putString(ID_DO_REGISTRO,registro);
+            editor.commit();
         }
     }
 }
